@@ -44,12 +44,12 @@ module.exports = () => {
       let results = [];
 
 
-      // create a promise for each API call
+      // create a promise for each API call in order to get an array of API request data
       let requests = tags.map(tag => {
         return axios.get(`https://api.hatchways.io/assessment/blog/posts?tag=${tag}`)
       })
 
-      // get an array of API data for ALL api calls
+      // make concurrent requests to API
       Promise.all(requests)
         .then((body) => {
           body.forEach(result => {
