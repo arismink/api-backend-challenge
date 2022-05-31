@@ -10,7 +10,7 @@ describe('Sanity test', () => {
 
 describe('/GET posts', () => {
 
-  test('should return all posts tagged tech', async () => {
+  test('should return all posts tagged tech when optional params are not present', async () => {
     const res = await request(app).get('/api/posts/tech')
 
     // should return an object containing property 'posts'
@@ -28,6 +28,18 @@ describe('/GET posts', () => {
     const res = await request(app).get('/api/posts/')
 
     expect(res._body).toHaveProperty('error')
+  });
+
+  test('should display appropriate message if sortBy params is invalid', async () => {
+    const res = await request(app).get('/api/posts/tech/fakeParams')
+
+    expect(res._body).toHaveProperty('error', "sortBy parameter is invalid. Please enter a valid sort params from: id, reads, likes, popularity or leave blank.")
+  });
+
+  test('should display appropriate message if direction param is invalid', async () => {
+    const res = await request(app).get('/api/posts/tech/id/fakeDirection')
+
+    expect(res._body).toHaveProperty('error', "Sort direction is invalid. Please enter a valid direction from: desc, asc or leave blank.")
   });
 
 })

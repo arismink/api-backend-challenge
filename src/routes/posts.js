@@ -35,7 +35,7 @@ module.exports = () => {
       console.log('tag', tags)
 
       // if entered, check if sort tag is valid
-      if (sortParam && !sortCheck(sortParam)) throw Error("sortBy parameter is invalid. Please enter a valid sort tag from: id, reads, likes, popularity or leave blank.");
+      if (sortParam && !sortCheck(sortParam)) throw Error("sortBy parameter is invalid. Please enter a valid sort params from: id, reads, likes, popularity or leave blank.");
 
       // if entered, check if direction is valid
       if (sortDirection && !directionCheck(sortDirection)) throw Error("Sort direction is invalid. Please enter a valid direction from: desc, asc or leave blank.");
