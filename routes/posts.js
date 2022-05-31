@@ -27,13 +27,12 @@ module.exports = () => {
       const sortDirection = "" || req.params.sortDirection;
 
       // Check if tag is valid
-      if (!req.params.tag) {
+      if (!tagCheck(req.params.tag)) {
         throw Error ("Tags parameter is required")
-      } else {
-        tag = req.params.tag.split(',');
-        console.log('tag', tag)
-      };
+      }
 
+      tags = tagCheck(req.params.tag);
+      console.log('tag', tags)
 
       // if entered, check if sort tag is valid
       if (sortTag && !sortCheck(sortTag)) throw Error("sortBy parameter is invalid. Please enter a valid sort tag from: id, reads, likes, popularity or leave blank.");
@@ -41,18 +40,32 @@ module.exports = () => {
       // if entered, check if direction is valid
       if (sortDirection && !directionCheck(sortDirection)) throw Error("Sort direction is invalid. Please enter a valid direction from: desc, asc or leave blank.");
 
-      const url = `https://api.hatchways.io/assessment/blog/posts?tag=${tag}`
+
+      let results = [];
 
 
-      console.log(tag.length)
-      console.log(url)
+      let requests = tags.map(tag => {
+        console.log('requests called')
 
-      axios.get(url)
-      .then(result => {
-
-        const sortedData = dataSort(result.data.posts, sortTag || false, sortDirection || false);
-        res.send({ posts: sortedData});
+        // create a promise for each API call
+        return axios.get(`https://api.hatchways.io/assessment/blog/posts?tag=${tag}`)
       })
+
+      Promise.all(requests)
+        .then((body) => {
+          body.forEach(result => {
+            if (result){
+              results.push(result)}
+          })
+
+          const sortedData = dataSort(results[0].data.posts, sortTag || false, sortDirection || false);
+
+
+          res.send({posts: sortedData})
+
+        })
+        .catch(err => console.log(err.message))
+
 
     } catch(e) {
       res.send({error: e.message}).status(400)
