@@ -27,9 +27,10 @@ const sortByPopularity = (data, direction) => {
   return data.sort((a, b) => a.popularity > b.popularity ? 1 : -1);
 };
 
-const dataSort = (data, sortTag, direction) => {
+// sort data based on sortBy parameter
+const dataSort = (data, sortParam, direction) => {
 
-  switch(sortTag) {
+  switch(sortParam) {
     case("id"):
       return sortById(data, direction);
 
@@ -48,6 +49,7 @@ const dataSort = (data, sortTag, direction) => {
 
 };
 
+// Look for duplicates in data
 const removeDuplicates = (data) => {
   const results = data.reduce((unique, o) => {
     if (!unique.some(obj => obj.likes === o.likes && obj.authorId === o.authorId && obj.reads === o.reads)) {

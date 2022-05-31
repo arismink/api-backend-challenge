@@ -19,11 +19,11 @@ module.exports = () => {
     })
   })
 
-  router.get("/posts/:tag?/:sortTag?/:sortDirection?", (req, res) => {
+  router.get("/posts/:tag?/:sortParam?/:sortDirection?", (req, res) => {
 
     try {
       let tag = "";
-      const sortTag = "" || req.params.sortTag;
+      const sortParam = "" || req.params.sortParam;
       const sortDirection = "" || req.params.sortDirection;
 
       // Check if tag is valid
@@ -35,7 +35,7 @@ module.exports = () => {
       console.log('tag', tags)
 
       // if entered, check if sort tag is valid
-      if (sortTag && !sortCheck(sortTag)) throw Error("sortBy parameter is invalid. Please enter a valid sort tag from: id, reads, likes, popularity or leave blank.");
+      if (sortParam && !sortCheck(sortParam)) throw Error("sortBy parameter is invalid. Please enter a valid sort tag from: id, reads, likes, popularity or leave blank.");
 
       // if entered, check if direction is valid
       if (sortDirection && !directionCheck(sortDirection)) throw Error("Sort direction is invalid. Please enter a valid direction from: desc, asc or leave blank.");
@@ -61,9 +61,13 @@ module.exports = () => {
             }
           })
 
-          const sortedData = dataSort(results, sortTag || false, sortDirection || false);
+          // pass the data to be sorted accordingly based on sort parameter
+          const sortedData = dataSort(results, sortParam || false, sortDirection || false);
 
+          // clean up data by removing duplicates
           const cleanedData = removeDuplicates(sortedData)
+
+          // send results
           res.send({posts: cleanedData})
 
         })
