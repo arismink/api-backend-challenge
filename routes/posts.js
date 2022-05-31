@@ -15,9 +15,18 @@ module.exports = () => {
     })
   })
 
-  // router.get("/posts", (req, res) => {
+  router.get("/posts/:tag/:sortTag?/:sortDirection?", (req, res) => {
+    const tag = "" || req.params.tag;
+    const sortTag = "" || req.params.sortTag;
+    const sortDirection = "" || req.params.sortDirection;
 
-  //   axios.get("https://api.hatchways.io/assessment/blog/posts?tag=:tag")
-  // })
+    const url = `https://api.hatchways.io/assessment/blog/posts?tag=${tag}`
+
+
+    axios.get(url)
+    .then(result => {
+      res.send(result.data)
+    })
+  })
   return router;
 };
