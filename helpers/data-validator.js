@@ -1,4 +1,9 @@
 // functions that validate the tag values entered
+const tagCheck = (tag) => {
+  if (!tag) return false
+  return tag.split(',');
+}
+
 const sortCheck = (sort) => {
   const validSorts = ['id', 'reads', 'likes', 'popularity'];
 
@@ -13,4 +18,4 @@ const directionCheck = (direction) => {
   return true;
 }
 
-module.exports = { sortCheck, directionCheck };
+module.exports = { tagCheck, sortCheck, directionCheck };
