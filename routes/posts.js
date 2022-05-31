@@ -4,7 +4,7 @@ const router = require("express").Router();
 
 const { tagCheck, sortCheck, directionCheck } = require("../helpers/data-validator");
 
-const { dataSort } = require("../helpers/data-helpers");
+const { dataSort, removeDuplicates } = require("../helpers/data-helpers");
 
 module.exports = () => {
   router.get("/ping", (req, res) => {
@@ -44,24 +44,27 @@ module.exports = () => {
       let results = [];
 
 
+      // create a promise for each API call
       let requests = tags.map(tag => {
-        console.log('requests called')
-
-        // create a promise for each API call
         return axios.get(`https://api.hatchways.io/assessment/blog/posts?tag=${tag}`)
       })
 
+      // get an array of API data for ALL api calls
       Promise.all(requests)
         .then((body) => {
           body.forEach(result => {
+
             if (result){
-              results.push(result)}
+              for (const obj of result.data.posts) {
+                results.push(obj)
+              }
+            }
           })
 
-          const sortedData = dataSort(results[0].data.posts, sortTag || false, sortDirection || false);
+          const sortedData = dataSort(results, sortTag || false, sortDirection || false);
 
-
-          res.send({posts: sortedData})
+          const cleanedData = removeDuplicates(sortedData)
+          res.send({posts: cleanedData})
 
         })
         .catch(err => console.log(err.message))
