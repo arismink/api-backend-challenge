@@ -48,4 +48,15 @@ const dataSort = (data, sortTag, direction) => {
 
 };
 
-module.exports = { dataSort };
+const removeDuplicates = (data) => {
+  const results = data.reduce((unique, o) => {
+    if (!unique.some(obj => obj.likes === o.likes && obj.authorId === o.authorId && obj.reads === o.reads)) {
+      unique.push(o);
+    }
+    return unique;
+  }, [])
+
+  return results;
+}
+
+module.exports = { dataSort, removeDuplicates };
