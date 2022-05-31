@@ -22,7 +22,6 @@ module.exports = () => {
   router.get("/posts/:tag?/:sortParam?/:sortDirection?", (req, res) => {
 
     try {
-      let tag = "";
       const sortParam = "" || req.params.sortParam;
       const sortDirection = "" || req.params.sortDirection;
 
@@ -31,7 +30,7 @@ module.exports = () => {
         throw Error ("Tags parameter is required")
       }
 
-      tags = tagCheck(req.params.tag);
+      let tags = tagCheck(req.params.tag);
       console.log('tag', tags)
 
       // if entered, check if sort tag is valid
