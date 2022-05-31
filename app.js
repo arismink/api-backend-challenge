@@ -10,6 +10,10 @@ app.use(bodyParser.json());
 
 app.use(morgan("dev"));
 
+// routes
+const postRouter = require("./routes/posts");
+
+app.use("/api", postRouter());
 
 app.listen(3000, () => {
   console.log("Server running on port 3000")
