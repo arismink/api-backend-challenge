@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 
 // routes
-const postRouter = require("./routes/posts");
+const postRouter = require("./src/routes/posts");
 
 app.use("/api", postRouter());
 
